@@ -10,7 +10,7 @@ services:
       - ./data:/data
       - ./logs:/app/logs
     environment:
-      - SQL_DSN=liusoon:sly20141109@tcp(mysql:3306)/new-api  # 指向mysql服务
+      - SQL_DSN=root:lsy20141109@tcp(mysql:3306)/new-api  # 指向mysql服务
       - REDIS_CONN_STRING=redis://redis
       - TZ=Asia/Shanghai
       - GENERATE_DEFAULT_TOKEN=true
