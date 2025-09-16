@@ -1,5 +1,3 @@
-version: '3.4'
-
 services:
   new-api:
     image: calciumion/new-api:latest
@@ -12,21 +10,20 @@ services:
       - ./data:/data
       - ./logs:/app/logs
     environment:
-      - SQL_DSN=root:123456@tcp(mysql:3306)/new-api  # Point to the mysql service
+      - SQL_DSN=liusoon:sly20141109@tcp(mysql:3306)/new-api  # 指向mysql服务
       - REDIS_CONN_STRING=redis://redis
       - TZ=Asia/Shanghai
-      - ERROR_LOG_ENABLED=true # 是否启用错误日志记录
-    #      - STREAMING_TIMEOUT=300  # 流模式无响应超时时间，单位秒，默认120秒，如果出现空补全可以尝试改为更大值
+      - GENERATE_DEFAULT_TOKEN=true
     #      - SESSION_SECRET=random_string  # 多机部署时设置，必须修改这个随机字符串！！！！！！！
-    #      - NODE_TYPE=slave  # Uncomment for slave node in multi-node deployment
-    #      - SYNC_FREQUENCY=60  # Uncomment if regular database syncing is needed
-    #      - FRONTEND_BASE_URL=https://openai.justsong.cn  # Uncomment for multi-node deployment with front-end URL
+    #      - NODE_TYPE=slave  # 多机部署的从节点取消注释
+    #      - SYNC_FREQUENCY=60  # 如需定期同步数据库，取消注释
+    #      - FRONTEND_BASE_URL=https://your-domain.com  # 多机部署带前端URL时取消注释
 
     depends_on:
       - redis
       - mysql
     healthcheck:
-      test: ["CMD-SHELL", "wget -q -O - http://localhost:3000/api/status | grep -o '\"success\":\\s*true' | awk -F: '{print $$2}'"]
+      test: ["CMD-SHELL", "wget -q -O - http://137.220.150.50:3000/api/status | grep -o '\"success\":\\s*true' | awk -F: '{print $$2}'"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -41,12 +38,13 @@ services:
     container_name: mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 123456  # Ensure this matches the password in SQL_DSN
+      MYSQL_ROOT_PASSWORD: lsy20141109  # 确保与SQL_DSN中的密码一致
       MYSQL_DATABASE: new-api
     volumes:
       - mysql_data:/var/lib/mysql
     # ports:
-    #   - "3306:3306"  # If you want to access MySQL from outside Docker, uncomment
+    #   - "3306:3306"  # 如需从Docker外部访问MySQL，取消注释
 
 volumes:
   mysql_data:
+  
